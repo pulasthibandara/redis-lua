@@ -1,6 +1,6 @@
 use itertools::Itertools;
-use proc_macro::{Delimiter, Span, TokenStream, TokenTree};
 use proc_macro2::Span as Span2;
+use proc_macro2::{Delimiter, Span, TokenStream, TokenTree};
 use std::{
     fmt::{self, Display, Formatter},
     iter::IntoIterator,
@@ -75,7 +75,7 @@ fn parse_pos(span: &Span) -> Option<(usize, usize)> {
 fn fallback_span_pos(span: &Span) -> (Pos, Pos) {
     let (start, end) = match parse_pos(span) {
         Some(v) => v,
-        None => proc_macro_error::abort_call_site!(
+        None => proc_macro_error2::abort_call_site!(
             "Cannot retrieve span information; please use nightly"
         ),
     };

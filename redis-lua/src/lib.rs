@@ -167,8 +167,6 @@
 //! * The warnings are available only in nightly. All the warnings are treated as errors in stable.
 //!
 
-use proc_macro_hack::proc_macro_hack;
-
 mod script;
 mod types;
 
@@ -177,11 +175,9 @@ pub use redis;
 pub use serde;
 
 /// Macro to embed Lua script in Rust code.
-#[proc_macro_hack]
 pub use redis_lua_macro::lua;
 
 /// Macro to convert Lua script to string.
-#[proc_macro_hack]
 pub use redis_lua_macro::lua_s;
 
 pub use script::{gen_script, Info, Script, ScriptJoin, TakeScript};

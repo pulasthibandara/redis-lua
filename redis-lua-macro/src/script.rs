@@ -1,7 +1,6 @@
-use crate::{
-    proc_macro::{Span, TokenStream, TokenTree},
-    token::{retokenize, Pos, Token},
-};
+use crate::token::{retokenize, Pos, Token};
+use proc_macro2::{Span, TokenStream, TokenTree};
+
 use std::collections::BTreeMap;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

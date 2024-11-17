@@ -1,2 +1,6 @@
 [workspace]
 members = ["redis-lua-macro", "redis-lua"]
+
+[workspace.dependencies]
+redis = "0.27"
+serde = "1.0"

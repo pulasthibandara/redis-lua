@@ -1,8 +1,6 @@
-use crate::{
-    proc_macro::{Ident, Span, TokenStream as TokenStream1, TokenTree},
-    script::{Arg, ArgType, Script},
-};
+use crate::script::{Arg, ArgType, Script};
 use proc_macro2::TokenStream;
+use proc_macro2::{Ident, Span, TokenStream as TokenStream1, TokenTree};
 use quote::quote;
 
 pub fn new_ident(s: String) -> TokenStream {

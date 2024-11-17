@@ -7,7 +7,7 @@ async fn boxed_add() {
     use redis_lua::Script;
 
     let script1 = Box::new(redis_lua::lua!(
-        return @x + 10;
+        return  @x + 10;
     )) as Box<dyn redis_lua::Script>;
     let script2 = Box::new(redis_lua::lua!(
         return @y + 10;

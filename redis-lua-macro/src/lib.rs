@@ -1,8 +1,8 @@
 extern crate proc_macro;
 
-use self::proc_macro::{TokenStream as TokenStream1, TokenTree};
-use proc_macro2::TokenStream;
-use proc_macro_error::proc_macro_error;
+use self::proc_macro::TokenStream as TokenStream1;
+use proc_macro2::{TokenStream, TokenTree};
+use proc_macro_error2::proc_macro_error;
 use quote::quote;
 
 mod chains;
@@ -19,10 +19,8 @@ use crate::{
     script::Script,
 };
 
-use proc_macro_hack::proc_macro_hack;
-
 fn to_ident(tt: &TokenTree) -> TokenStream {
-    let s: TokenStream1 = tt.clone().into();
+    let s: TokenStream = tt.clone().into();
     s.into()
 }
 
@@ -44,9 +42,9 @@ fn gen_all(script: &Script) -> TokenStream {
 }
 
 #[proc_macro_error]
-#[proc_macro_hack]
+#[proc_macro]
 pub fn lua(input: TokenStream1) -> TokenStream1 {
-    let script = Script::new(input, true);
+    let script = Script::new(input.into(), true);
 
     Checker::new()
         .defines(all(&script).map(|(_, arg)| arg.as_lua().into()).collect())
@@ -80,9 +78,9 @@ pub fn lua(input: TokenStream1) -> TokenStream1 {
 }
 
 #[proc_macro_error]
-#[proc_macro_hack]
+#[proc_macro]
 pub fn lua_s(input: TokenStream1) -> TokenStream1 {
-    let script = Script::new(input, false);
+    let script = Script::new(input.into(), false);
 
     Checker::new().define("ARGV").check(&script);
 

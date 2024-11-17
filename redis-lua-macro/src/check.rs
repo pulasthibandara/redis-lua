@@ -1,18 +1,13 @@
-use crate::{file::as_path, proc_macro::Span, script::Script};
-use full_moon::{
-    ast::{owned::Owned, AstError},
-    tokenizer::Token,
-    Error as ParseError,
-};
-use proc_macro_error::{Diagnostic as PDiagnostic, Level as PLevel};
-use selene_lib::{
-    rules::Severity, standard_library::StandardLibrary, Checker as SeleneChecker, CheckerConfig,
-    CheckerDiagnostic,
-};
+use crate::script::Script;
+use full_moon::{ast::AstError, tokenizer::Token, Error as ParseError};
+use proc_macro2::Span;
+use proc_macro_error2::{Diagnostic as PDiagnostic, Level as PLevel};
+use selene_lib::{lints::Severity, Checker as SeleneChecker, CheckerConfig, CheckerDiagnostic};
 use std::include_str;
 
 fn convert_level(l: Severity) -> PLevel {
     match l {
+        Severity::Allow => PLevel::Warning,
         Severity::Error => PLevel::Error,
         #[cfg(unstable)]
         Severity::Warning => PLevel::Warning,
@@ -99,7 +94,7 @@ impl Checker {
 
     pub fn check(&self, script: &Script) {
         let ast = match full_moon::parse(script.script()) {
-            Ok(ast) => ast.owned(),
+            Ok(ast) => ast,
             Err(ParseError::AstError(AstError::UnexpectedToken {
                 token,
                 additional: _,
@@ -115,12 +110,14 @@ impl Checker {
             }
         };
 
-        let std = StandardLibrary::from_file(&as_path(&make_cfg(&self.defined))).unwrap();
+        let cfg = make_cfg(&self.defined);
+        // deserializing the standard library
+        let std: selene_lib::standard_library::v1::StandardLibrary = toml::from_str(&cfg).unwrap();
         let cfg: CheckerConfig<toml::value::Value> =
             toml::from_str(include_str!("selene.toml")).unwrap();
 
         // Create a linter
-        let checker = SeleneChecker::new(cfg, std.unwrap()).unwrap();
+        let checker = SeleneChecker::new(cfg, std.into()).unwrap();
 
         // Run the linter
         let mut diags = checker.test_on(&ast);
