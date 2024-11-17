@@ -49,9 +49,9 @@ pub fn script_arg<T: Serialize + ?Sized>(value: &T) -> ScriptArg {
 }
 
 impl ToRedisArgs for ScriptArg {
-    fn write_redis_args<W: ?Sized>(&self, out: &mut W)
+    fn write_redis_args<W>(&self, out: &mut W)
     where
-        W: RedisWrite,
+        W: ?Sized + RedisWrite,
     {
         self.buf.write_redis_args(out);
     }
@@ -125,65 +125,80 @@ where
     type SerializeStructVariant = Compound<Arg<'a, W>, Map>;
 
     fn serialize_bool(self, v: bool) -> Result<()> {
-        Ok((v as usize).write_redis_args(self.0))
+        (v as usize).write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_i8(self, v: i8) -> Result<()> {
-        Ok(v.write_redis_args(self.0))
+        v.write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_i16(self, v: i16) -> Result<()> {
-        Ok(v.write_redis_args(self.0))
+        v.write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_i32(self, v: i32) -> Result<()> {
-        Ok(v.write_redis_args(self.0))
+        v.write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_i64(self, v: i64) -> Result<()> {
-        Ok(v.write_redis_args(self.0))
+        v.write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_u8(self, v: u8) -> Result<()> {
-        Ok(v.write_redis_args(self.0))
+        v.write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_u16(self, v: u16) -> Result<()> {
-        Ok(v.write_redis_args(self.0))
+        v.write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_u32(self, v: u32) -> Result<()> {
-        Ok(v.write_redis_args(self.0))
+        v.write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_u64(self, v: u64) -> Result<()> {
-        Ok(v.write_redis_args(self.0))
+        v.write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_f32(self, v: f32) -> Result<()> {
-        Ok(v.write_redis_args(self.0))
+        v.write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_f64(self, v: f64) -> Result<()> {
-        Ok(v.write_redis_args(self.0))
+        v.write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_char(self, v: char) -> Result<()> {
         let mut buf = [0; 4];
         let len = v.encode_utf8(&mut buf).len();
-        Ok((&buf[..len]).write_redis_args(self.0))
+        (&buf[..len]).write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_str(self, v: &str) -> Result<()> {
-        Ok(v.write_redis_args(self.0))
+        v.write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_bytes(self, v: &[u8]) -> Result<()> {
-        Ok(v.write_redis_args(self.0))
+        v.write_redis_args(self.0);
+        Ok(())
     }
 
     fn serialize_none(self) -> Result<()> {
-        Ok(self.write_null())
+        self.write_null();
+        Ok(())
     }
 
     fn serialize_some<T>(self, value: &T) -> Result<()>
@@ -194,11 +209,13 @@ where
     }
 
     fn serialize_unit(self) -> Result<()> {
-        Ok(self.write_null())
+        self.write_null();
+        Ok(())
     }
 
     fn serialize_unit_struct(self, _name: &'static str) -> Result<()> {
-        Ok(self.write_null())
+        self.write_null();
+        Ok(())
     }
 
     fn serialize_unit_variant(
@@ -600,9 +617,9 @@ where
         }
     }
 
-    fn add<T: ?Sized>(&mut self, value: &T) -> Result<()>
+    fn add<T>(&mut self, value: &T) -> Result<()>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         self.len += 1;
 
@@ -655,9 +672,9 @@ where
     type Ok = ();
     type Error = Error;
 
-    fn serialize_element<T: ?Sized>(&mut self, value: &T) -> Result<()>
+    fn serialize_element<T>(&mut self, value: &T) -> Result<()>
     where
-        T: Serialize,
+        T: ?Sized + Serialize,
     {
         self.add(value)
     }

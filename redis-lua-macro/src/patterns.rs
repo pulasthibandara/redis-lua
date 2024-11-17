@@ -5,7 +5,7 @@ use quote::quote;
 
 pub fn new_ident(s: String) -> TokenStream {
     let s: TokenStream1 = TokenTree::Ident(Ident::new(&s, Span::call_site())).into();
-    s.into()
+    s
 }
 
 pub fn all(script: &Script) -> impl Iterator<Item = (usize, &Arg)> {

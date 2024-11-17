@@ -20,8 +20,8 @@ fn emit_diag_one(span: Vec<Span>, cd: CheckerDiagnostic) {
     let d = cd.diagnostic;
     let msg = format!("in lua: {} ({})", d.message, d.code);
 
-    let pd = match span.get(0).cloned() {
-        Some(span) => PDiagnostic::spanned(span.into(), convert_level(cd.severity), msg),
+    let pd = match span.first().cloned() {
+        Some(span) => PDiagnostic::spanned(span, convert_level(cd.severity), msg),
         None => PDiagnostic::new(convert_level(cd.severity), msg),
     };
     let pd = d
@@ -40,8 +40,8 @@ fn emit_parse_err(script: &Script, msg: &str, token: Option<&Token>) {
 
     let msg = format!("in lua: {} (parse_error)", msg);
 
-    let pd = match spans.get(0).cloned() {
-        Some(span) => PDiagnostic::spanned(span.into(), PLevel::Error, msg),
+    let pd = match spans.first().cloned() {
+        Some(span) => PDiagnostic::spanned(span, PLevel::Error, msg),
         None => PDiagnostic::new(PLevel::Error, msg),
     };
     pd.emit();

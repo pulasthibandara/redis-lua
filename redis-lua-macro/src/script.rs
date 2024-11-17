@@ -128,10 +128,10 @@ impl Script {
                 .unwrap_or_else(|| (line, col));
 
             if line > prev_line {
-                script.push_str("\n");
+                script.push('\n');
             } else if line == prev_line {
                 for _ in 0..col.saturating_sub(prev_col) {
-                    script.push_str(" ");
+                    script.push(' ');
                 }
             }
             let begin = script.len();
@@ -139,7 +139,7 @@ impl Script {
             let end = script.len();
 
             for i in begin..=end {
-                spans.insert(i, span.clone());
+                spans.insert(i, span);
             }
 
             pos = Some(t.end());
@@ -192,7 +192,7 @@ impl Script {
     pub fn range_to_span(&self, range: (usize, usize)) -> Vec<Span> {
         self.spans
             .range(range.0..=range.1)
-            .map(|(_, v)| v.clone())
+            .map(|(_, v)| *v)
             .collect()
     }
 }

@@ -108,7 +108,7 @@ pub trait TakeScript<I> {
 
 /// Generate a script from a list of script information.
 pub fn gen_script(info: &[Info], args: &[ScriptArg]) -> redis::Script {
-    assert!(info.len() > 0, "No script information");
+    assert!(!info.is_empty(), "No script information");
 
     // Generate the joined script.
     let mut arg_index = 0;

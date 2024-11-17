@@ -20,7 +20,7 @@ use crate::{
 
 fn to_ident(tt: &TokenTree) -> TokenStream {
     let s: TokenStream = tt.clone().into();
-    s.into()
+    s
 }
 
 fn gen_all(script: &Script) -> TokenStream {
