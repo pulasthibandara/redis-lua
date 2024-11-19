@@ -23,7 +23,7 @@ toml = "0.8"
 proc-macro2 = { version = "1.0", features = ["span-locations"] }
 proc-macro-error2 = "2.0"
 itertools = "0.13"
-regex = "1.11"
+regex = "1.6"
 
 [build-dependencies]
 rustc_version = "0.4"
